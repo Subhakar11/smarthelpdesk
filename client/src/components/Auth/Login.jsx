@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../../api' // direct axios instance use karo
 import { useAuth } from '../../context/AuthContext'
 
 const Login = ({ setError }) => {
@@ -9,7 +10,7 @@ const Login = ({ setError }) => {
   })
   const [loading, setLoading] = useState(false)
 
-  const { login } = useAuth()
+  const { setUser } = useAuth()
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -24,15 +25,25 @@ const Login = ({ setError }) => {
     setLoading(true)
 
     try {
-      const result = await login(formData.email, formData.password)
-      
-      if (result.success) {
+      // 🔑 Call backend login API
+      const res = await api.post('/auth/login', formData)
+
+      if (res.data?.token) {
+        // Save token + user in localStorage
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('user', JSON.stringify(res.data.user))
+
+        // Update AuthContext
+        setUser(res.data.user)
+
         navigate('/')
       } else {
-        setError(result.error)
+        setError('Invalid login response, no token received')
       }
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError(
+        error.response?.data?.message || 'Invalid email or password'
+      )
     } finally {
       setLoading(false)
     }
