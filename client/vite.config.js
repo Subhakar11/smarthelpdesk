@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://smarthelpdeskb.onrender.com',
+        target: 'https://smarthelpdeskbackend.onrender.com',
         changeOrigin: true
       }
     }
