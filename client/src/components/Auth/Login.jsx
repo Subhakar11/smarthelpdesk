@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import api from '../../api' // direct axios instance use karo
+import api from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 
 const Login = ({ setError }) => {
