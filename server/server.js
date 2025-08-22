@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path'); // ✅ FIX: path import kiya
+const path = require('path');
 require('dotenv').config();
 
 // Routes
@@ -24,7 +24,7 @@ connectDB();
 // ✅ Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || '*', // frontend URL (Render पर React ka link)
+    origin: process.env.CLIENT_URL, // frontend URL (Render par React ka link)
     credentials: true,
   })
 );
@@ -44,9 +44,9 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// ✅ Serve frontend in production
+// ✅ Serve React frontend (production mode only)
 if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, 'client', 'dist');
+  const frontendPath = path.join(__dirname, '..', 'client', 'dist');
   app.use(express.static(frontendPath));
 
   app.get('*', (req, res) => {
