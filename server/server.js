@@ -22,10 +22,12 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -39,8 +41,8 @@ app.use('/api/audit', auditRoutes);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, 'client', 'dist'); // 👈 for Vite
-  // const frontendPath = path.join(__dirname, 'client', 'build'); // 👈 for CRA
+  // ✅ Go up from /server to /client/dist
+  const frontendPath = path.join(__dirname, '..', 'client', 'dist');
 
   app.use(express.static(frontendPath));
 
